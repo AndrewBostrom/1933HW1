@@ -1,0 +1,48 @@
+/**
+ * Created for CSCI 1933 Fall class @ UMN
+ * Created by Allen Lin linx0344@cs.umn.edu
+ */
+//Import the java plugin
+apply plugin: 'java'
+
+/**
+ * Customize the java folder layout
+ */
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+/**
+ * Define the run task to execute java class
+ */
+task run(dependsOn: classes, type: JavaExec){
+    main = 'edu.csci1933.TweetProcessor'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+/**
+ * Define the tar task to compress the submission
+ */
+task tar(dependsOn: run, type: Tar){
+    extension = 'tar.gz'
+    baseName = project.name
+    compression = Compression.GZIP
+    destinationDir = project.projectDir
+
+    into('src/'){
+        from('src/')
+    }
+
+    into('dat/'){
+        from('dat/')
+    }
+
+    into(''){
+        from('build.gradle')
+    }
+
+}
